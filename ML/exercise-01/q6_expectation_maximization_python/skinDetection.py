@@ -22,12 +22,14 @@ def skinDetection(ndata, sdata, K, n_iter, epsilon, theta, img):
     # compute GMM
     nweights, nmeans, ncovariances = estGaussMixEM(ndata, K, n_iter, epsilon)
     sweights, smeans, scovariances = estGaussMixEM(sdata, K, n_iter, epsilon)
-
+    print(nweights.shape, nmeans.shape, ncovariances.shape)
     result = np.zeros(img.shape[:2])
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
+            temp = img[i][j]
             nlogLikelihood = getLogLikelihood(nmeans, nweights, ncovariances, img[i, j])
             slogLikelihood = getLogLikelihood(smeans, sweights, scovariances, img[i, j])
-            if nlogLikelihood < theta * slogLikelihood:
+            # print(nlogLikelihood, slogLikelihood)
+            if np.exp(slogLikelihood) > theta * np.exp(nlogLikelihood):
                 result[i, j] = 1
     return result

@@ -18,15 +18,15 @@ def getLogLikelihood(means, weights, covariances, X):
     if (len(X.shape) > 1):
         N, D = X.shape
     else:
-        D = X.shape[0]
+        D = len(X)
         N = 1
     K = len(weights)
 
     logLikelihood = 0
     if (N == 1):
         for k in range(K):
-            logLikelihood += weights[k] * np.exp(-0.5 * (X-means[k]) ** 2 / covariances[k]) / ( np.sqrt(2 * np.pi * covariances[k]))
-            logLikelihood = np.log(logLikelihood)
+            logLikelihood += weights[k] * np.exp(-0.5 * np.dot(np.dot((X - means[k]), np.linalg.inv(covariances[:, :, k])), (X - means[k]).T)) / (np.sqrt((2 * np.pi) ** D * np.linalg.det(covariances[:, :, k])))
+        logLikelihood = np.log(logLikelihood)
     else:
         for n in range(N):
             temp = 0
