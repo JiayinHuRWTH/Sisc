@@ -13,4 +13,10 @@ def simpleClassifier(X, Y):
     # j 		: the dimension to "look at" (scalar)
 
     #####Insert your code here for subtask 1b#####
+    N, D = X.shape
+    least_error = np.inf
+    theta = 0
+    j = 0
+    # for each dimension
+    
     return j, theta
